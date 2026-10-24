@@ -1,0 +1,289 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Matrici statiche C++ · Tutorial</title><style>:root{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:#18304a;background:#f4f7fb;font-size:16px}*{box-sizing:border-box}body{margin:0}a{color:#1460ab;text-decoration:none}a:hover{text-decoration:underline}.top{background:#112b49;color:white;padding:17px max(22px,calc((100vw - 1100px)/2));display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}.top a{color:white}.brand{font-weight:800;font-size:1.1rem}.nav{display:flex;gap:20px;flex-wrap:wrap}main{max-width:1100px;margin:35px auto;padding:0 22px 60px}.hero{background:linear-gradient(120deg,#154d81,#1b79b2);color:#fff;border-radius:20px;padding:30px;margin-bottom:24px}.hero h1{margin:0 0 10px;font-size:clamp(1.8rem,4vw,2.6rem)}.hero p{max-width:760px;line-height:1.6}.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}.tile,.panel{background:white;border:1px solid #dbe5ee;border-radius:16px;padding:22px;box-shadow:0 2px 8px #152b4510}.tile h2,.panel h2{margin:0 0 10px}.tile p,.panel p{line-height:1.65}.pill{display:inline-block;background:#e4f2ff;color:#15558c;border-radius:30px;padding:5px 11px;font-size:.78rem;font-weight:700}.muted{color:#51667a}.crumbs{font-size:.87rem;margin-bottom:18px}.lesson-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(285px,.9fr);gap:18px}.wide{grid-column:1/-1}.small-heading{color:#216ba3;text-transform:uppercase;letter-spacing:.08em;font-size:.78rem;font-weight:800}.matrix{display:grid;gap:5px;margin:14px auto;max-width:540px}.cell{min-height:58px;border:2px solid #d9e4ef;background:#eff5fb;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-direction:column;font-weight:800;font-size:1.2rem;transition:background .2s,border .2s}.cell small{font-weight:500;font-size:.65rem;color:#537088}.cell.active{border-color:#f09b22;background:#ffeac8;box-shadow:0 0 0 2px #f9bd61}.cell.done{background:#d9ecff;border-color:#83b5df}.cell.focus{background:#d6f5e9;border-color:#36a377}.memory{display:flex;overflow-x:auto;gap:4px;padding:10px 1px}.memcell{min-width:58px;max-width:70px;flex:1;text-align:center;background:#edf1f7;border:1px solid #cad8e6;border-radius:7px;padding:10px 5px;font-weight:700}.memcell small{display:block;font-size:.65rem;font-weight:500;color:#536981}.memcell.active{background:#ffe0a2;border:2px solid #ec9a25}.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:end}.field{display:flex;flex-direction:column;gap:5px;font-size:.85rem;font-weight:700}.field select,.field input{padding:10px;border:1px solid #b7c8d8;border-radius:9px;background:white;color:#18304a;max-width:100%}button,.btn{border:0;border-radius:9px;padding:11px 16px;background:#186da9;color:white;font-weight:700;cursor:pointer;font-size:.91rem}button:hover,.btn:hover{background:#0d568a;text-decoration:none}button:disabled{opacity:.4;cursor:not-allowed}.secondary{background:#e8f1f8;color:#194b70}.secondary:hover{background:#d6e7f5}pre{background:#10253a;color:#e7f5ff;border-radius:12px;overflow-x:auto;padding:14px;line-height:1.75;font-size:.87rem}code{font-family:Consolas,'Liberation Mono',monospace}.code-line{display:block;padding:0 8px;border-left:3px solid transparent;white-space:pre}.code-line.highlight{background:#315776;border-left-color:#ffbc55}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));gap:8px;margin:12px 0}.stat{background:#f0f5fa;border-radius:10px;padding:11px}.stat strong{display:block;font-size:1.18rem}.stat small{color:#5b6d7e}.feedback{background:#eef5fc;border-left:4px solid #3689c6;padding:13px 16px;border-radius:8px;line-height:1.5}.tip{background:#fff5df;border-left-color:#d99c28}.exercise{border-top:1px solid #e5ecf2;padding:12px 0}.exercise:first-child{border:0}.exercise label{display:block;margin:7px 0}.footer{text-align:center;color:#617286;padding:30px}.inline-code{background:#edf3f8;border-radius:4px;padding:2px 5px}h1,h2,h3{line-height:1.25}h3{margin-bottom:8px}@media(max-width:780px){.lesson-grid{grid-template-columns:1fr}.cell{min-height:48px}.hero{padding:23px}.top{padding:16px 22px}}@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+/* Matrice didattica con intestazioni e indici ben distinguibili */
+.matrix{max-width:680px;gap:5px}
+.matrix-heading{background:#dce9f5;border:1px solid #bad0e3;border-radius:8px;min-height:38px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:.76rem;font-weight:750;color:#183b5c;padding:4px}
+.matrix-heading.corner{background:transparent;border:0}
+.matrix .cell{color:#111827;background:#edf5fc;gap:5px;padding:5px 2px;min-width:0}
+.matrix .cell .cell-index{display:inline-block;color:#fff;background:#274b70;border-radius:5px;padding:3px 7px;font-size:.72rem;font-weight:700;line-height:1.2}
+.matrix .cell .cell-value{color:#111;font-size:1.24rem;font-weight:800;line-height:1.25}
+.matrix .cell.active{background:#ffeac8}
+.matrix .cell.done{background:#d9ecff}
+@media(max-width:520px){.matrix-heading{font-size:.61rem;padding:3px 1px}.matrix .cell{min-height:52px}.matrix .cell .cell-index{font-size:.61rem;padding:2px 3px}.matrix .cell .cell-value{font-size:1rem}}
+
+.topic-nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.topic-nav a{padding:9px 13px;border-radius:9px;background:#e7f2fc;font-weight:700}.operation-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:18px}.operation-card{border:1px solid #d6e4f0;border-radius:12px;padding:16px;background:#f9fbfe}.operation-card h3{margin-top:0}.operation-card p{min-height:80px}.launch-operation{width:100%;font-size:.83rem}.operation-section{scroll-margin-top:20px}@media(max-width:650px){.operation-cards{grid-template-columns:1fr}.operation-card p{min-height:0}}
+
+/* Caricamento didattico della matrice: selezione visibile e input vicino alla griglia */
+#chooseInit.chosen-mode,#chooseInput.chosen-mode{background:#125b94;color:#fff;box-shadow:0 0 0 3px #a7d5f4}
+.fill-workspace{margin-top:14px;padding:14px;border:1px solid #d5e3ef;border-radius:12px;background:#f8fbff}
+.fill-entry{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:8px}
+.fill-entry input{min-width:160px;max-width:250px;flex:1;padding:11px;border:2px solid #83aeca;border-radius:9px;font:inherit}
+.fill-bottom-controls{margin-top:12px}
+#fillPrompt{display:block}
+#fillInputFeedback{margin-bottom:0}
+[hidden]{display:none!important}
+.algorithm-matrix{margin:18px 0}.algorithm-columns{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:start}.algorithm-columns pre{margin:9px 0}.execution-box{border:1px solid #d9e4ef;border-radius:12px;padding:14px;background:#fbfdff}.execution-box h3{margin-top:0}.execution-box .stats{grid-template-columns:repeat(2,minmax(0,1fr))}@media(max-width:780px){.algorithm-columns{grid-template-columns:1fr}}
+[hidden]{display:none!important}
+
+/* Controlli dell'esecuzione sopra le variabili; schede compatte. */
+.execution-controls{margin:3px 0 12px;gap:6px;align-items:center}
+.execution-controls button{padding:7px 9px;font-size:.79rem}
+.execution-controls #progress{flex-basis:100%;font-size:.76rem}
+.execution-box .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:9px 0}
+.execution-box .stat{padding:7px 9px;min-width:0;border-radius:7px}
+.execution-box .stat small{font-size:.67rem;line-height:1.25;display:block;overflow-wrap:anywhere}
+.execution-box .stat strong{font-size:1rem;line-height:1.3;overflow-wrap:anywhere}
+.execution-box h3{margin-top:12px;font-size:1rem}
+@media(max-width:780px){.execution-box .stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style></head><body><header class="top"><a class="brand" href="../../index.html">⌘ Tutorial di Programmazione</a><nav class="nav"><a href="../index.html">Strutture dati</a><a href="#laboratorio">Simulatore</a><a href="#esercizi">Esercizi</a></nav></header><main><div class="crumbs"><a href="../../index.html">Home</a> / <a href="../index.html">Strutture dati</a> / Matrici statiche</div><section class="hero"><span class="pill">Classe terza • C++</span><h1>Matrici statiche: impara vedendo il codice in azione</h1><p>Dalla dichiarazione alle elaborazioni per riga e per colonna. Segui i cicli annidati, osserva le variabili e controlla come cambiano le variabili.</p></section>
+<section class="panel" style="margin-bottom:18px"><div class="small-heading">01 · Comprendi</div><h2>Una tabella di numeri</h2><p>Una matrice è un array bidimensionale: per individuare una casella servono <b>due indici</b>, prima la <b>riga</b> e poi la <b>colonna</b>. Gli indici partono da <b>zero</b>.</p><pre><code>int numeroRighe = 3;
+int numeroColonne = 4;
+int matrice[3][4];</code></pre><p><b>Perché <code>matrice[3][4]</code> e non <code>matrice[numeroRighe][numeroColonne]</code>?</b> Un array statico in C++ standard richiede dimensioni note in fase di compilazione. Le due variabili, senza <code>const</code>, serviranno a rendere leggibili i limiti dei cicli, ma non cambiano la dimensione della matrice. Dopo la dichiarazione possiamo scegliere tra <b>inizializzazione nel codice</b> e <b>caricamento con <code>cin</code></b>. Una matrice locale non inizializzata non contiene valori utilizzabili in modo affidabile.</p><div class="lesson-grid"><div><h3>Esplora la matrice</h3><div id="introMatrix" class="matrix"></div><p id="introReadout" class="feedback" aria-live="polite">Seleziona una casella.</p></div><div><h3>Righe e colonne</h3><p>La prima riga ha indice 0, la seconda indice 1 e così via. Nella nostra matrice gli indici di riga sono <code>0, 1, 2</code>, quelli di colonna <code>0, 1, 2, 3</code>.</p><p>Nei dati di esempio, <code>matrice[1][2]</code> contiene <b>17</b>.</p><div class="feedback tip">Non confondere il <b>numero di righe</b> (3) con l'<b>indice dell'ultima riga</b> (2). L'accesso fuori dai limiti dell'array ha comportamento non definito.</div></div></div></section>
+<section class="panel" id="valori" style="margin-bottom:18px"><div class="small-heading">02 · Attribuisci i valori</div><h2>Inizializzazione oppure caricamento da tastiera?</h2><p>Le due modalità servono allo stesso scopo: assegnare valori agli elementi. <b>Nell'inizializzazione</b> i valori sono scritti nella dichiarazione. <b>Nel caricamento con <code>cin</code></b> l'utente li fornisce durante l'esecuzione.</p><div class="controls"><button class="secondary" id="chooseInit">Mostra inizializzazione</button><button class="secondary" id="chooseInput">Mostra input con cin</button></div><div class="lesson-grid"><div><h3 id="fillTitle">Inizializzazione</h3><pre><code id="fillCode"></code></pre><p id="fillExplain" class="feedback" aria-live="polite"></p></div><div><h3>Come si riempiono le caselle</h3><div id="fillMatrix" class="matrix"></div><p class="muted" id="fillProgress">0 elementi su 12.</p>
+<div class="fill-workspace" id="fillWorkspace">
+  <div id="fillInputArea" hidden>
+    <label for="fillUserValue" id="fillPrompt"><b>Inserisci matrice[0][0]</b></label>
+    <form id="fillForm" class="fill-entry">
+      <input id="fillUserValue" type="number" step="1" required placeholder="Scrivi un numero intero" autocomplete="off" aria-describedby="fillInputFeedback">
+      <button type="submit" id="fillSubmit">Conferma valore ↵</button>
+    </form>
+    <p id="fillInputFeedback" class="muted" aria-live="polite">Simula l'istruzione cin della casella evidenziata.</p>
+  </div>
+  <div class="controls fill-bottom-controls"><button id="fillNext">Valore successivo →</button><button class="secondary" id="fillReset">↺ Ricomincia</button></div>
+</div></div></div><p class="muted">L'animazione dell'inizializzazione è uno <b>schema didattico</b> dell'associazione valori/celle; non rappresenta dodici istruzioni <code>cin</code>.</p></section>
+
+<section class="panel" style="margin-bottom:18px"><div class="small-heading">04 · Carica e stampa</div><h2>Visita con due cicli annidati</h2><div class="lesson-grid"><div><pre><code>for (int riga = 0; riga &lt; numeroRighe; riga++) {
+    for (int colonna = 0; colonna &lt; numeroColonne; colonna++) {
+        cin >> matrice[riga][colonna];
+    }
+}</code></pre><p>Il ciclo esterno sceglie una riga; il ciclo interno attraversa tutte le colonne. Per stampare, sostituisci <code>cin</code> con <code>cout</code> e inserisci <code>cout &lt;&lt; endl;</code> <b>all'interno del ciclo esterno, dopo quello interno</b>.</p></div><div><h3>Qual è il prossimo elemento?</h3><p>Nel simulatore sottostante puoi scegliere la visita e avanzare una cella per volta: il codice evidenziato segue il passo in esecuzione.</p><a class="btn" href="#laboratorio">Vai al simulatore ↓</a></div></div></section>
+<section id="laboratorio" class="panel" style="margin-bottom:18px"><div class="small-heading">05 · Laboratorio interattivo</div><h2>Osserva gli algoritmi in esecuzione</h2><p>La simulazione utilizza una matrice con <b>valori di esempio già disponibili</b>, ottenibili sia mediante inizializzazione sia mediante <code>cin</code>. Scegli se elaborare <b>tutti gli elementi</b>, <b>una riga alla volta</b> o <b>una colonna alla volta</b>; poi seleziona l'operazione. Per una media il simulatore costruisce prima la somma; per massimo e minimo confronta i valori progressivamente.</p><div class="controls"><label class="field">Ambito<select id="scope"><option value="all">Intera matrice</option><option value="row">Per riga</option><option value="col">Per colonna</option></select></label><label class="field">Operazione<select id="metric"><option value="sum">Somma</option><option value="avg">Media</option><option value="max">Massimo</option><option value="min">Minimo</option><option value="find">Ricerca valore</option><option value="eq">Conteggio ==</option><option value="lt">Conteggio &lt;</option><option value="gt">Conteggio &gt;</option></select></label><label class="field" id="targetField">Valore da cercare/confrontare<input id="targetNumber" type="number" step="1" value="15" style="max-width:150px"></label><label class="field">Velocità animazione<select id="speed"><option value="1100">Lenta</option><option value="650" selected>Normale</option><option value="300">Veloce</option></select></label></div><div class="algorithm-matrix"><h3>Matrice elaborata</h3><div id="simMatrix" class="matrix"></div></div>
+<div class="algorithm-columns">
+  <div><h3>Codice C++ corrispondente</h3><p class="muted">La riga evidenziata è quella eseguita nella fase corrente.</p><pre id="codeView" aria-label="Codice C++"></pre><button id="copyCode" class="secondary">Copia codice C++</button></div>
+  <div class="execution-box"><h3>Esecuzione e variabili</h3><div class="controls execution-controls"><button id="prev" class="secondary">← Indietro</button><button id="next">Avanti →</button><button id="play">▶ Esegui</button><button id="reset" class="secondary">↺ Ricomincia</button><span id="progress" class="muted" aria-live="polite"></span></div><div id="explain" class="feedback" style="white-space:pre-line" aria-live="polite">Premi Avanti per iniziare.</div><div class="stats"><div class="stat"><small>Riga</small><strong id="rigaValue">—</strong></div><div class="stat"><small>Colonna</small><strong id="colValue">—</strong></div><div class="stat"><small id="accName">Somma</small><strong id="accValue">—</strong></div><div class="stat"><small>Elementi visitati</small><strong id="countValue">0</strong></div></div><h3>Memoria delle variabili</h3><div id="variablesPanel" class="stats" aria-live="polite"></div><div id="resultsPanel" class="feedback">I risultati appariranno quando terminerà ciascuna elaborazione.</div></div>
+</div></section>
+<section class="panel" id="operazioni" style="margin-bottom:18px"><div class="small-heading">06 · Approfondisci le operazioni</div><h2>Un'operazione alla volta</h2><p>Ogni argomento ha una spiegazione dedicata. Seleziona <b>Avvia simulazione</b> per vedere il codice e le variabili nel laboratorio interattivo.</p><nav class="topic-nav" aria-label="Tipi di elaborazione"><a href="#operazioni-tutti">Intera matrice</a><a href="#operazioni-righe">Per riga</a><a href="#operazioni-colonne">Per colonna</a></nav></section><section class="panel operation-section" id="operazioni-tutti" style="margin-bottom:18px"><div class="small-heading">INTERA MATRICE</div><h2>Intera matrice: somma, media, massimo, minimo</h2><p>Visitiamo tutti gli elementi. La media si ottiene dividendo per <code>numeroRighe * numeroColonne</code>.</p><div class="operation-cards"><article class="operation-card" id="all-sum"><h3>Somma</h3><p>Aggiungiamo uno alla volta i valori alla variabile <code>somma</code>, che parte da zero.</p><button class="launch-operation" data-scope="all" data-metric="sum">▶ Avvia simulazione: somma intera matrice</button></article><article class="operation-card" id="all-avg"><h3>Media</h3><p>Calcoliamo la somma e dividiamo per il numero degli elementi del gruppo.</p><button class="launch-operation" data-scope="all" data-metric="avg">▶ Avvia simulazione: media intera matrice</button></article><article class="operation-card" id="all-max"><h3>Massimo</h3><p>Partiamo dal primo elemento del gruppo e aggiorniamo <code>massimo</code> quando troviamo un valore più grande.</p><button class="launch-operation" data-scope="all" data-metric="max">▶ Avvia simulazione: massimo intera matrice</button></article><article class="operation-card" id="all-min"><h3>Minimo</h3><p>Partiamo dal primo elemento del gruppo e aggiorniamo <code>minimo</code> quando troviamo un valore più piccolo.</p><button class="launch-operation" data-scope="all" data-metric="min">▶ Avvia simulazione: minimo intera matrice</button></article><article class="operation-card"><h3>Ricerca di un valore</h3><p>Controlliamo se il valore cercato è presente, aggiornando la variabile booleana trovato.</p><button class="launch-operation" data-scope="all" data-metric="find">▶ Avvia simulazione: ricerca di un valore intera matrice</button></article><article class="operation-card"><h3>Conteggio ==</h3><p>Contiamo gli elementi uguali al valore scelto.</p><button class="launch-operation" data-scope="all" data-metric="eq">▶ Avvia simulazione: conteggio == intera matrice</button></article><article class="operation-card"><h3>Conteggio &lt;</h3><p>Contiamo gli elementi inferiori al valore scelto.</p><button class="launch-operation" data-scope="all" data-metric="lt">▶ Avvia simulazione: conteggio &lt; intera matrice</button></article><article class="operation-card"><h3>Conteggio &gt;</h3><p>Contiamo gli elementi superiori al valore scelto.</p><button class="launch-operation" data-scope="all" data-metric="gt">▶ Avvia simulazione: conteggio &gt; intera matrice</button></article></div></section><section class="panel operation-section" id="operazioni-righe" style="margin-bottom:18px"><div class="small-heading">PER RIGA</div><h2>Per riga: somma, media, massimo, minimo</h2><p>Elaboriamo ogni riga separatamente. La variabile risultato va reinizializzata a ogni nuova riga: la media divide per <code>numeroColonne</code>.</p><div class="operation-cards"><article class="operation-card" id="row-sum"><h3>Somma</h3><p>Aggiungiamo uno alla volta i valori alla variabile <code>somma</code>, che parte da zero.</p><button class="launch-operation" data-scope="row" data-metric="sum">▶ Avvia simulazione: somma per riga</button></article><article class="operation-card" id="row-avg"><h3>Media</h3><p>Calcoliamo la somma e dividiamo per il numero degli elementi del gruppo.</p><button class="launch-operation" data-scope="row" data-metric="avg">▶ Avvia simulazione: media per riga</button></article><article class="operation-card" id="row-max"><h3>Massimo</h3><p>Partiamo dal primo elemento del gruppo e aggiorniamo <code>massimo</code> quando troviamo un valore più grande.</p><button class="launch-operation" data-scope="row" data-metric="max">▶ Avvia simulazione: massimo per riga</button></article><article class="operation-card" id="row-min"><h3>Minimo</h3><p>Partiamo dal primo elemento del gruppo e aggiorniamo <code>minimo</code> quando troviamo un valore più piccolo.</p><button class="launch-operation" data-scope="row" data-metric="min">▶ Avvia simulazione: minimo per riga</button></article><article class="operation-card"><h3>Ricerca di un valore</h3><p>Controlliamo se il valore cercato è presente, aggiornando la variabile booleana trovato.</p><button class="launch-operation" data-scope="row" data-metric="find">▶ Avvia simulazione: ricerca di un valore per riga</button></article><article class="operation-card"><h3>Conteggio ==</h3><p>Contiamo gli elementi uguali al valore scelto.</p><button class="launch-operation" data-scope="row" data-metric="eq">▶ Avvia simulazione: conteggio == per riga</button></article><article class="operation-card"><h3>Conteggio &lt;</h3><p>Contiamo gli elementi inferiori al valore scelto.</p><button class="launch-operation" data-scope="row" data-metric="lt">▶ Avvia simulazione: conteggio &lt; per riga</button></article><article class="operation-card"><h3>Conteggio &gt;</h3><p>Contiamo gli elementi superiori al valore scelto.</p><button class="launch-operation" data-scope="row" data-metric="gt">▶ Avvia simulazione: conteggio &gt; per riga</button></article></div></section><section class="panel operation-section" id="operazioni-colonne" style="margin-bottom:18px"><div class="small-heading">PER COLONNA</div><h2>Per colonna: somma, media, massimo, minimo</h2><p>Elaboriamo ogni colonna separatamente. Il ciclo esterno percorre le colonne e quello interno le righe: la media divide per <code>numeroRighe</code>.</p><div class="operation-cards"><article class="operation-card" id="col-sum"><h3>Somma</h3><p>Aggiungiamo uno alla volta i valori alla variabile <code>somma</code>, che parte da zero.</p><button class="launch-operation" data-scope="col" data-metric="sum">▶ Avvia simulazione: somma per colonna</button></article><article class="operation-card" id="col-avg"><h3>Media</h3><p>Calcoliamo la somma e dividiamo per il numero degli elementi del gruppo.</p><button class="launch-operation" data-scope="col" data-metric="avg">▶ Avvia simulazione: media per colonna</button></article><article class="operation-card" id="col-max"><h3>Massimo</h3><p>Partiamo dal primo elemento del gruppo e aggiorniamo <code>massimo</code> quando troviamo un valore più grande.</p><button class="launch-operation" data-scope="col" data-metric="max">▶ Avvia simulazione: massimo per colonna</button></article><article class="operation-card" id="col-min"><h3>Minimo</h3><p>Partiamo dal primo elemento del gruppo e aggiorniamo <code>minimo</code> quando troviamo un valore più piccolo.</p><button class="launch-operation" data-scope="col" data-metric="min">▶ Avvia simulazione: minimo per colonna</button></article><article class="operation-card"><h3>Ricerca di un valore</h3><p>Controlliamo se il valore cercato è presente, aggiornando la variabile booleana trovato.</p><button class="launch-operation" data-scope="col" data-metric="find">▶ Avvia simulazione: ricerca di un valore per colonna</button></article><article class="operation-card"><h3>Conteggio ==</h3><p>Contiamo gli elementi uguali al valore scelto.</p><button class="launch-operation" data-scope="col" data-metric="eq">▶ Avvia simulazione: conteggio == per colonna</button></article><article class="operation-card"><h3>Conteggio &lt;</h3><p>Contiamo gli elementi inferiori al valore scelto.</p><button class="launch-operation" data-scope="col" data-metric="lt">▶ Avvia simulazione: conteggio &lt; per colonna</button></article><article class="operation-card"><h3>Conteggio &gt;</h3><p>Contiamo gli elementi superiori al valore scelto.</p><button class="launch-operation" data-scope="col" data-metric="gt">▶ Avvia simulazione: conteggio &gt; per colonna</button></article></div></section><section class="panel" style="margin-bottom:18px"><div class="small-heading">07 · Confronta</div><h2>Righe e colonne: cosa cambia?</h2><div class="lesson-grid"><div><h3>Elaborazione per riga</h3><pre><code>for (int riga = 0; riga &lt; numeroRighe; riga++) {
+    int somma = 0;
+    for (int colonna = 0; colonna &lt; numeroColonne; colonna++) {
+        somma += matrice[riga][colonna];
+    }
+    cout &lt;&lt; somma &lt;&lt; endl;
+}</code></pre><p>La variabile <code>somma</code> viene azzerata <b>per ogni nuova riga</b>.</p></div><div><h3>Elaborazione per colonna</h3><pre><code>for (int colonna = 0; colonna &lt; numeroColonne; colonna++) {
+    int somma = 0;
+    for (int riga = 0; riga &lt; numeroRighe; riga++) {
+        somma += matrice[riga][colonna];
+    }
+    cout &lt;&lt; somma &lt;&lt; endl;
+}</code></pre><p>La variabile <code>somma</code> viene azzerata <b>per ogni nuova colonna</b>.</p></div></div><p class="feedback tip"><b>Attenzione per massimo e minimo:</b> all'inizio di ogni nuova riga si inizializza il valore con <code>matrice[riga][0]</code>; all'inizio di ogni nuova colonna con <code>matrice[0][colonna]</code>. Non si parte automaticamente da zero.</p></section>
+<section class="panel" id="esercizi"><div class="small-heading">08 · Mettiti alla prova</div><h2>Prevedi, controlla, correggi</h2><div id="quiz"></div><button id="checkQuiz">Controlla le risposte</button><p id="quizResult" class="feedback" style="display:none" aria-live="polite"></p><h3>Problema di realtà: torneo di videogiochi</h3><p>Una scuola registra i punti di <b>3 squadre</b> in <b>4 manche</b>. Usando una matrice statica <code>int punti[3][4]</code>, scrivi un programma che carichi i punteggi e calcoli somma, media, massimo e minimo complessivi, per squadra (riga) e per manche (colonna). Riutilizza l'organizzazione dei cicli vista nel simulatore.</p></section></main><footer class="footer">Tutorial di Programmazione · Modulo Matrici Statiche</footer><script>'use strict';
+const values=[[12,18,15,20],[9,14,17,11],[21,16,13,19]];
+const NROWS=3,NCOLS=4,$=id=>document.getElementById(id);
+const flatten=values.flat();let position=-1,steps=[],timer=null,chosen=null,sourceCode='';
+function grid(el,selected,completed=[],clickable=false){
+  el.style.gridTemplateColumns=`minmax(70px,.86fr) repeat(${NCOLS},minmax(0,1fr))`;
+  el.replaceChildren();
+  const corner=document.createElement('div');corner.className='matrix-heading corner';corner.textContent='';el.append(corner);
+  for(let c=0;c<NCOLS;c++){const h=document.createElement('div');h.className='matrix-heading';h.textContent=`Colonna ${c}`;el.append(h);}
+  values.forEach((row,r)=>{
+    const heading=document.createElement('div');heading.className='matrix-heading';heading.textContent=`Riga ${r}`;el.append(heading);
+    row.forEach((v,c)=>{
+      const d=document.createElement(clickable?'button':'div');d.className='cell';
+      const key=`${r},${c}`;
+      if(selected&&selected[0]===r&&selected[1]===c)d.classList.add('active');
+      else if(completed.includes(key))d.classList.add('done');
+      const index=document.createElement('small');index.className='cell-index';index.textContent=`[${r}][${c}]`;
+      const value=document.createElement('span');value.className='cell-value';value.textContent=String(v);
+      d.append(index,value);
+      if(clickable){d.type='button';d.setAttribute('aria-label',`riga ${r}, colonna ${c}, valore ${v}`);
+        d.onclick=()=>{chosen=[r,c];grid(el,chosen,[],true);$('introReadout').textContent=`matrice[${r}][${c}] = ${v}. È nella riga ${r}, colonna ${c} (indici da zero).`;};}
+      el.append(d);
+    });
+  });
+}
+function calcSteps(){
+ const scope=$('scope').value,metric=$('metric').value,target=Number($('targetNumber').value);
+ $('targetField').style.display=['find','eq','lt','gt'].includes(metric)?'flex':'none';
+ let groups=[];
+ if(scope==='all')groups=[Array.from({length:NROWS*NCOLS},(_,n)=>[Math.floor(n/NCOLS),n%NCOLS])];
+ else if(scope==='row')groups=values.map((row,r)=>row.map((_,c)=>[r,c]));
+ else groups=values[0].map((_,c)=>values.map((_,r)=>[r,c]));
+ steps=[];
+ groups.forEach((group,gi)=>{
+  const [firstR,firstC]=group[0];
+  let acc=['sum','avg','eq','lt','gt'].includes(metric)?0:metric==='find'?false:values[firstR][firstC];
+  const label=scope==='all'?'intera matrice':scope==='row'?`riga ${gi}`:`colonna ${gi}`;
+  const varName=metric==='find'?'trovato':['eq','lt','gt'].includes(metric)?'conteggio':metric==='sum'||metric==='avg'?'somma':metric==='max'?'massimo':'minimo';
+  steps.push({type:'init',r:firstR,c:firstC,acc,gi,label,text:`Inizializzo ${varName} a ${format(acc)} prima di elaborare ${label}.`});
+  group.forEach(([r,c],idx)=>{
+   const before=acc,val=values[r][c];
+   if(metric==='sum'||metric==='avg')acc+=val;
+   else if(metric==='max')acc=Math.max(acc,val);
+   else if(metric==='min')acc=Math.min(acc,val);
+   else if(metric==='find')acc=acc||val===target;
+   else if((metric==='eq'&&val===target)||(metric==='lt'&&val<target)||(metric==='gt'&&val>target))acc++;
+   steps.push({type:'visit',r,c,value:val,acc,before,gi,idx,label,target});
+  });
+  const result=metric==='avg'?acc*1.0/group.length:acc;
+  steps.push({type:'result',r:null,c:null,acc,gi,label,result,count:group.length,text:metric==='avg'?`Media di ${label}: ${acc} * 1.0 / ${group.length} = ${format(result)}.`:metric==='find'?`Ricerca in ${label}: ${result?'valore trovato':'valore non trovato'}.`:`Risultato di ${label}: ${format(result)}.`});
+ });
+ position=-1;render();
+}
+function format(x){if(typeof x==='boolean')return x?'true':'false';return Number.isInteger(x)?String(x):x.toFixed(2).replace('.',',');}
+function makeCode(){
+ const scope=$('scope').value,metric=$('metric').value;
+ let lines=['#include <iostream>','using namespace std;','','int main() {','    int numeroRighe = 3;','    int numeroColonne = 4;','    int matrice[3][4];','','    // Caricamento dei dati','    for (int riga = 0; riga < numeroRighe; riga++) {','        for (int colonna = 0; colonna < numeroColonne; colonna++) {','            cin >> matrice[riga][colonna];','        }','    }',''];
+ const grouped=scope!=='all',outer=scope==='col'?'colonna':'riga',inner=scope==='col'?'riga':'colonna';
+ const name=metric==='find'?'trovato':['eq','lt','gt'].includes(metric)?'conteggio':metric==='sum'||metric==='avg'?'somma':metric==='max'?'massimo':'minimo';
+ const init=['sum','avg','eq','lt','gt'].includes(metric)?'0':metric==='find'?'false':scope==='all'?'matrice[0][0]':scope==='row'?'matrice[riga][0]':'matrice[0][colonna]';
+ const comparison=metric==='eq'?'==':metric==='lt'?'<':'>';
+ const indent=grouped?'        ':'    ';
+ if(['find','eq','lt','gt'].includes(metric))lines.push('    int valore = '+Number($('targetNumber').value)+';');
+ if(!grouped)lines.push(`    ${metric==='find'?'bool':'int'} ${name} = ${init};`);
+ lines.push(`    for (int ${outer} = 0; ${outer} < numero${outer==='riga'?'Righe':'Colonne'}; ${outer}++) {`);
+ if(grouped)lines.push(`        ${metric==='find'?'bool':'int'} ${name} = ${init};`);
+ lines.push(`        for (int ${inner} = 0; ${inner} < numero${inner==='riga'?'Righe':'Colonne'}; ${inner}++) {`);
+ if(metric==='sum'||metric==='avg')lines.push('            somma += matrice[riga][colonna];');
+ else if(metric==='find'){
+   lines.push('            if (matrice[riga][colonna] == valore) {');
+   lines.push('                trovato = true;');
+   lines.push('            }');
+ }else if(['eq','lt','gt'].includes(metric)){
+   lines.push(`            if (matrice[riga][colonna] ${comparison} valore) {`);
+   lines.push('                conteggio++;');
+   lines.push('            }');
+ }else{
+   lines.push(`            if (matrice[riga][colonna] ${metric==='max'?'>':'<'} ${name}) {`);
+   lines.push(`                ${name} = matrice[riga][colonna];`);
+   lines.push('            }');
+ }
+ lines.push('        }');
+ const divisor=scope==='all'?'(numeroRighe * numeroColonne)':scope==='row'?'numeroColonne':'numeroRighe';
+ if(grouped){
+   if(metric==='avg')lines.push(`        double media = somma * 1.0 / ${divisor};`);
+   lines.push(`        cout << "${scope==='row'?'Riga':'Colonna'} " << ${outer} << ": " << ${metric==='avg'?'media':name} << endl;`);
+ }
+ lines.push('    }');
+ if(!grouped){
+   if(metric==='avg')lines.push(`    double media = somma * 1.0 / ${divisor};`);
+   lines.push(`    cout << "Risultato: " << ${metric==='avg'?'media':name} << endl;`);
+ }
+ lines.push('    return 0;','}');
+ sourceCode=lines.join('\n');return lines;
+}
+function drawCode(event){
+ const lines=makeCode(),pre=$('codeView');pre.replaceChildren();
+ const metric=$('metric').value;
+ let sought=[];
+ if(event){
+  if(event.type==='init')sought=[/\b(?:int|bool) (?:somma|massimo|minimo|conteggio|trovato) =/];
+  if(event.type==='visit')sought=metric==='sum'||metric==='avg'?[/somma \+=/]:['find','eq','lt','gt'].includes(metric)?[/if \(matrice\[riga\]\[colonna\]/]:[/if \(matrice\[riga\]\[colonna\]/];
+  if(event.type==='result')sought=metric==='avg'?[/double media =/]:[/cout <</];
+ }
+ let highlights=lines.map((line,i)=>sought.some(re=>re.test(line))?i:-1).filter(i=>i>=0);
+ if(event&&event.type==='result'&&metric!=='avg')highlights=highlights.slice(-1);
+ lines.forEach((line,i)=>{
+  const span=document.createElement('span');span.className='code-line';span.textContent=String(i+1).padStart(2,' ')+' │ '+line;
+  if(highlights.includes(i))span.classList.add('highlight');
+  pre.append(span);
+ });
+}
+function render(){
+ const s=steps[position],seen=steps.slice(0,position+1),visited=seen.filter(t=>t.type==='visit').map(t=>`${t.r},${t.c}`);
+ grid($('simMatrix'),s&&s.type==='visit'?[s.r,s.c]:null,visited);
+ $('rigaValue').textContent=s&&s.type==='visit'?s.r:'—';$('colValue').textContent=s&&s.type==='visit'?s.c:'—';
+ const metric=$('metric').value,name=metric==='find'?'trovato':['eq','lt','gt'].includes(metric)?'conteggio':metric==='sum'||metric==='avg'?'somma':metric==='max'?'massimo':'minimo';
+ $('accName').textContent=name.charAt(0).toUpperCase()+name.slice(1);
+ $('accValue').textContent=s?format(s.acc):'—';
+ $('countValue').textContent=seen.filter(t=>t.type==='visit').length;
+ $('progress').textContent=`Fase ${position+1} di ${steps.length}`;
+ let explanation='Premi Avanti: inizieremo dall’inizializzazione della variabile.';
+ if(s){if(s.type==='init')explanation=s.text;
+ else if(s.type==='result')explanation=s.text;
+ else {
+   const valoreCella=`Valore della cella: matrice[${s.r}][${s.c}] = ${s.value}`;
+   const modificaVariabile=['eq','lt','gt','find'].includes(metric)
+     ? `Variabile ${name}: confronto ${s.value} ${metric==='find'||metric==='eq'?'==':metric==='lt'?'<':'>'} ${s.target}; ${name} ${s.acc!==s.before?'cambia da '+format(s.before)+' a':'rimane'} ${format(s.acc)}.`
+     : metric==='sum'||metric==='avg'
+       ? `Aggiornamento della somma: ${s.before} + ${s.value} = ${s.acc}`
+       : `Variabile ${name}: confronto ${s.value} con ${s.before}; ${name} ${s.acc!==s.before?'diventa':'rimane'} ${s.acc}.`;
+   explanation=valoreCella+'\n'+modificaVariabile;
+ }
+ }
+ $('explain').textContent=explanation;drawCode(s);
+ const panel=$('variablesPanel');panel.replaceChildren();
+ [['numeroRighe','3'],['numeroColonne','4'],['riga',s&&s.type==='visit'?s.r:'—'],['colonna',s&&s.type==='visit'?s.c:'—'],[name,s?format(s.acc):'—'],...(metric==='avg'?[['media',s&&s.type==='result'?format(s.result):'—']]:[])].forEach(([title,value])=>{const box=document.createElement('div');box.className='stat';let small=document.createElement('small'),strong=document.createElement('strong');small.textContent=title;strong.textContent=value;box.append(small,strong);panel.append(box);});
+ let results=seen.filter(t=>t.type==='result');$('resultsPanel').textContent=results.length?'Risultati completati: '+results.map(t=>`${t.label}: ${format(t.result)}`).join(' • '):'I risultati appariranno quando terminerà ciascuna elaborazione.';
+ $('prev').disabled=position<0;$('next').disabled=position>=steps.length-1;
+}
+function advance(){if(position<steps.length-1){position++;render();}else stop();}function stop(){if(timer!==null){clearInterval(timer);timer=null;}$('play').textContent='▶ Esegui';}function restart(){stop();position=-1;render();}
+$('scope').addEventListener('change',()=>{stop();calcSteps();});$('metric').addEventListener('change',()=>{stop();calcSteps();});$('targetNumber').addEventListener('input',()=>{stop();calcSteps();});$('speed').addEventListener('change',()=>{if(timer!==null){stop();$('play').click();}});$('prev').onclick=()=>{stop();position=Math.max(-1,position-1);render();};$('next').onclick=()=>{stop();advance();};$('reset').onclick=restart;$('play').onclick=()=>{if(timer!==null){stop();return;}if(position===steps.length-1)position=-1;advance();timer=setInterval(()=>{if(position===steps.length-1){stop();return;}advance();},Number($('speed').value));$('play').textContent='⏸ Pausa';};$('copyCode').onclick=async()=>{try{await navigator.clipboard.writeText(sourceCode);$('copyCode').textContent='Copiato!';setTimeout(()=>$('copyCode').textContent='Copia codice C++',1200);}catch{const blob=new Blob([sourceCode],{type:'text/plain'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='matrice.cpp';a.click();URL.revokeObjectURL(url);}};
+const questions=[{q:'In una matrice int m[3][4], qual è l’ultimo indice valido di riga?',options:['3','2','4'],correct:1,why:'Tre righe hanno indici 0, 1 e 2.'},{q:'Per ottenere la somma separata di ogni colonna, quale ciclo è quello esterno?',options:['riga','colonna','non servono due cicli'],correct:1,why:'Il ciclo esterno deve fissare una colonna mentre quello interno percorre le righe.'},{q:'Dove si inizializza la somma di ciascuna riga?',options:['Prima di entrambi i cicli','Dentro il ciclo esterno, prima di quello interno','A ogni elemento nel ciclo interno'],correct:1,why:'La somma deve ripartire da zero a ogni nuova riga.'},{q:'Come inizializziamo il massimo per ciascuna colonna?',options:['int massimo = 0;','int massimo = matrice[0][colonna];','int massimo = matrice[colonna][0];'],correct:1,why:'Il primo valore della colonna corrente è matrice[0][colonna].'},{q:'Per la media di una singola riga in una matrice di 3 × 4, per cosa dividi la somma della riga?',options:['3','4','12'],correct:1,why:'Ogni riga contiene quattro elementi.'}];
+questions.forEach((q,i)=>{let el=document.createElement('div');el.className='exercise';let head=document.createElement('p');head.innerHTML=`<b>${i+1}. ${q.q}</b>`;el.append(head);q.options.forEach((option,j)=>{let label=document.createElement('label'),inp=document.createElement('input');inp.type='radio';inp.name=`q${i}`;inp.value=j;label.append(inp,document.createTextNode(' '+option));el.append(label);});let feedback=document.createElement('p');feedback.id=`feedback${i}`;feedback.className='muted';el.append(feedback);$('quiz').append(el);});$('checkQuiz').onclick=()=>{let score=0;questions.forEach((q,i)=>{let picked=document.querySelector(`input[name="q${i}"]:checked`),ok=picked&&Number(picked.value)===q.correct;if(ok)score++;$(`feedback${i}`).textContent=(ok?'✓ Corretto. ':'✗ Da rivedere. ')+q.why;});$('quizResult').style.display='block';$('quizResult').textContent=`Hai risposto correttamente a ${score} domande su ${questions.length}.`;};
+grid($('introMatrix'),null,[],true);calcSteps();
+
+// Inizializzazione: avanzamento guidato. Input: lo studente fornisce davvero ogni valore.
+let fillMode='init', fillPosition=0;
+let userInputValues=Array(NROWS*NCOLS).fill(null);
+const initCode=`int matrice[3][4] = {
+    {12, 18, 15, 20},
+    { 9, 14, 17, 11},
+    {21, 16, 13, 19}
+};`;
+const inputCode=`int numeroRighe = 3;
+int numeroColonne = 4;
+int matrice[3][4];
+
+for (int riga = 0; riga < numeroRighe; riga++) {
+    for (int colonna = 0; colonna < numeroColonne; colonna++) {
+        cin >> matrice[riga][colonna];
+    }
+}`;
+function drawFill(){
+ const input=fillMode==='input',finished=fillPosition===NROWS*NCOLS;
+ $('chooseInit').classList.toggle('chosen-mode',!input);
+ $('chooseInput').classList.toggle('chosen-mode',input);
+ $('chooseInit').setAttribute('aria-pressed',String(!input));
+ $('chooseInput').setAttribute('aria-pressed',String(input));
+ $('fillNext').hidden=input;
+ $('fillNext').style.display=input?'none':'';
+ $('fillInputArea').hidden=!input;
+ $('fillInputArea').style.display=input?'block':'none';
+ $('fillCode').textContent=input?inputCode:initCode;
+ $('fillTitle').textContent=input?'Caricamento con cin e cicli annidati':'Inizializzazione contestuale alla dichiarazione';
+ $('fillExplain').textContent=input?'Scrivi un numero intero e premi Conferma (o Invio): il valore verrà memorizzato nella casella evidenziata, come se fosse letto da cin.':'I valori sono elencati nel codice e raggruppati per riga. Premi «Valore successivo» sotto la matrice per evidenziare l’elemento successivo.';
+ const el=$('fillMatrix');el.replaceChildren();el.style.gridTemplateColumns=`minmax(70px,.86fr) repeat(${NCOLS},minmax(0,1fr))`;
+ const corner=document.createElement('div');corner.className='matrix-heading corner';el.append(corner);
+ for(let c=0;c<NCOLS;c++){const h=document.createElement('div');h.className='matrix-heading';h.textContent=`Colonna ${c}`;el.append(h);}
+ values.forEach((row,r)=>{const h=document.createElement('div');h.className='matrix-heading';h.textContent=`Riga ${r}`;el.append(h);
+ row.forEach((v,c)=>{const n=r*NCOLS+c,d=document.createElement('div');d.className='cell';
+   if(n===fillPosition && !finished)d.classList.add('active');
+   
+   if(n<fillPosition)d.classList.add('done');
+   const ix=document.createElement('small');ix.className='cell-index';ix.textContent=`[${r}][${c}]`;
+   const value=document.createElement('span');value.className='cell-value';value.textContent=n<fillPosition?String(input?userInputValues[n]:v):'?';
+   d.append(ix,value);el.append(d);
+ });});
+ $('fillProgress').textContent=`${fillPosition} elementi su ${NROWS*NCOLS} ${input?'inseriti':'mostrati'}. ${finished?'Matrice completa.':'Il simbolo ? indica un valore non ancora assegnato nella simulazione.'}`;
+ $('fillNext').disabled=finished;
+ $('fillUserValue').disabled=finished;
+ $('fillSubmit').disabled=finished;
+ if(input){$('fillPrompt').textContent=finished?'Tutti i valori sono stati inseriti':`Inserisci matrice[${Math.floor(fillPosition/NCOLS)}][${fillPosition%NCOLS}]`;
+ if(finished)$('fillInputFeedback').textContent='Caricamento completato: tutti i valori sono stati acquisiti.';}
+}
+function switchFill(mode){fillMode=mode;fillPosition=0;userInputValues=Array(NROWS*NCOLS).fill(null);$('fillUserValue').value='';$('fillInputFeedback').textContent='Simula l’istruzione cin della casella evidenziata.';drawFill();}
+$('chooseInit').onclick=()=>switchFill('init');
+$('chooseInput').onclick=()=>{switchFill('input');$('fillUserValue').focus();};
+$('fillNext').onclick=()=>{if(fillMode==='init'){fillPosition=Math.min(NROWS*NCOLS,fillPosition+1);drawFill();}};
+$('fillForm').onsubmit=e=>{e.preventDefault();if(fillMode!=='input'||fillPosition>=NROWS*NCOLS)return;
+ const field=$('fillUserValue'),v=field.value.trim();
+ if(!/^-?\d+$/.test(v)||!Number.isSafeInteger(Number(v))){$('fillInputFeedback').textContent='Inserisci un numero intero valido.';field.focus();return;}
+ const i=fillPosition;userInputValues[i]=Number(v);fillPosition++;field.value='';drawFill();
+ $('fillInputFeedback').textContent=`Acquisito matrice[${Math.floor(i/NCOLS)}][${i%NCOLS}] = ${userInputValues[i]}.`;
+ if(fillPosition<NROWS*NCOLS)field.focus();
+};
+$('fillReset').onclick=()=>switchFill(fillMode);
+for(const b of document.querySelectorAll('.launch-operation')){
+ b.onclick=()=>{stop();$('scope').value=b.dataset.scope;$('metric').value=b.dataset.metric;calcSteps();document.getElementById('laboratorio').scrollIntoView({behavior:'smooth'});};
+}
+drawFill();
+</script></body></html>
